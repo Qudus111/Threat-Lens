@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThreatLens — See every threat before it strikes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <p class="brand-name">ThreatLens</p>
+          <p class="brand-tag">See every threat before it strikes</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">⌂</span> Dashboard
+        </button>
+        <button class="nav-item" data-page="scan">
+          <span class="nav-icon">◎</span> Scan
+        </button>
+        <button class="nav-item" data-page="coach">
+          <span class="nav-icon">✦</span> AI Coach
+        </button>
+        <button class="nav-item" data-page="awareness">
+          <span class="nav-icon">▲</span> Cyber Awareness
+        </button>
+        <button class="nav-item" data-page="encyclopedia">
+          <span class="nav-icon">▤</span> Threat Encyclopedia
+        </button>
+        <button class="nav-item" data-page="reports">
+          <span class="nav-icon">▥</span> Reports
+        </button>
+        <button class="nav-item" data-page="settings">
+          <span class="nav-icon">⚙</span> Settings
+        </button>
+      </nav>
+
+      <div class="protection-chip">
+        <span class="dot"></span>
+        <div>
+          <p>Real-Time Protection</p>
+          <p class="chip-status">ON</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <header class="topbar">
+        <div>
+          <p class="greeting-sub" id="greetingTime">Good Morning,</p>
+          <h1 class="greeting" id="greetingName">User 👋</h1>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn">
+            🔔<span class="badge" id="notifBadge">0</span>
+          </button>
+          <div class="avatar" id="avatarInitial">U</div>
+        </div>
+      </header>
+
+      <!-- DASHBOARD PAGE -->
+      <section class="page active" id="page-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <p class="stat-label">System Status</p>
+            <p class="stat-value safe">✔ Protected</p>
+            <p class="stat-sub">Your device is safe</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Last Scan</p>
+            <p class="stat-value" id="lastScanValue">—</p>
+            <p class="stat-sub">Quick Scan</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Files Protected</p>
+            <p class="stat-value" id="filesProtectedValue">0</p>
+            <p class="stat-sub">Files scanned</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Threats Blocked</p>
+            <p class="stat-value danger" id="threatsBlockedValue">0</p>
+            <p class="stat-sub">This session</p>
+          </div>
+        </div>
+
+        <div class="dash-columns">
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Recent Activity</h2>
+              <button class="link-btn" data-page-link="reports">View All</button>
+            </div>
+            <ul class="activity-list" id="activityList">
+              <li class="activity-empty">No files scanned yet — try the Scan tab.</li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h2>Quick Actions</h2>
+            <div class="quick-grid">
+              <button class="quick-card" data-page-link="scan">
+                <span class="quick-icon blue">▤</span>
+                <span>Scan File<br><small>Scan any file</small></span>
+              </button>
+              <button class="quick-card" data-page-link="scan">
+                <span class="quick-icon purple">▥</span>
+                <span>Scan Folder<br><small>Scan a folder</small></span>
+              </button>
+              <button class="quick-card">
+                <span class="quick-icon green">✔</span>
+                <span>Real-Time Protection<br><small>Always ON</small></span>
+              </button>
+              <button class="quick-card">
+                <span class="quick-icon yellow">⟳</span>
+                <span>Update Database<br><small>Up to date</small></span>
+              </button>
+            </div>
+            <button class="quick-scan-btn" data-page-link="scan">◎ Start Quick Scan</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCAN PAGE -->
+      <section class="page" id="page-scan">
+        <div class="scan-page">
+          <h2 class="scan-title">Scan a File</h2>
+          <p class="scan-sub">Drop a file below to check it for common risk signals.</p>
+
+          <div class="dropzone" id="dropzone">
+            <div class="scanline" id="scanline"></div>
+            <input type="file" id="fileInput" hidden />
+            <div class="dropzone-content" id="dropzoneContent">
+              <span class="drop-icon">⤓</span>
+              <p class="drop-title">Drag a file here, or <button class="link-btn" id="browseBtn">browse</button></p>
+              <p class="drop-hint">Any file type · scanned via the VirusTotal API (real detection)</p>
+            </div>
+            <div class="file-chip" id="fileChip" hidden>
+              <span id="fileName"></span>
+              <button id="clearFile" aria-label="Remove file">✕</button>
+            </div>
+          </div>
+
+          <button class="scan-btn" id="scanBtn" disabled>Scan File</button>
+
+          <div class="terminal" id="terminal" hidden>
+            <div class="terminal-head">
+              <span></span><span></span><span></span>
+              <p>scan_log</p>
+            </div>
+            <div class="terminal-body" id="terminalBody"></div>
+          </div>
+
+          <div class="result-card" id="resultCard" hidden>
+            <div class="result-badge" id="resultBadge"></div>
+            <h3 id="resultTitle"></h3>
+            <p id="resultDesc"></p>
+            <a id="resultLink" href="#" target="_blank" rel="noopener" class="result-link" hidden>View full report on VirusTotal →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI COACH PAGE -->
+      <section class="page" id="page-coach">
+        <div class="coach-page">
+          <div class="coach-intro">
+            <div class="coach-avatar">✦</div>
+            <div>
+              <h2>ThreatLens AI Coach</h2>
+              <p>Ask me anything about cybersecurity awareness — Confidentiality, Integrity, and Availability included.</p>
+            </div>
+          </div>
+
+          <div class="coach-body">
+            <div class="coach-chat">
+              <div class="chat-messages" id="chatMessages"></div>
+              <form class="chat-input-row" id="chatForm">
+                <input type="text" id="chatInput" placeholder="Ask a question..." autocomplete="off" />
+                <button type="submit" class="chat-send">➤</button>
+              </form>
+            </div>
+
+            <div class="coach-suggestions">
+              <p class="suggestions-label">Quick questions</p>
+              <button class="suggestion-btn" data-q="What is the CIA triad?">What is the CIA triad?</button>
+              <button class="suggestion-btn" data-q="What is phishing?">What is phishing?</button>
+              <button class="suggestion-btn" data-q="How do ransomware attacks work?">How do ransomware attacks work?</button>
+              <button class="suggestion-btn" data-q="How do hackers steal passwords?">How do hackers steal passwords?</button>
+              <button class="suggestion-btn" data-q="Create strong passwords">Create strong passwords</button>
+              <button class="suggestion-btn" data-q="What is a Trojan?">What is a Trojan?</button>
+              <button class="suggestion-btn" data-q="What is two-factor authentication?">What is two-factor authentication?</button>
+              <button class="suggestion-btn" data-q="What is social engineering?">What is social engineering?</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CYBER AWARENESS PAGE -->
+      <section class="page" id="page-awareness">
+        <div class="awareness-page">
+          <h2 class="scan-title">Cyber Awareness</h2>
+          <p class="scan-sub">Build habits around Confidentiality, Integrity, and Availability — one tip at a time.</p>
+
+          <div class="tip-card">
+            <span class="tip-icon">💡</span>
+            <div class="tip-text">
+              <p class="tip-title" id="tipTitle"></p>
+              <p class="tip-desc" id="tipDesc"></p>
+            </div>
+          </div>
+          <div class="tip-dots" id="tipDots"></div>
+
+          <h3 class="lessons-heading">Lessons</h3>
+          <div class="lesson-grid" id="lessonGrid"></div>
+        </div>
+      </section>
+
+      <!-- THREAT ENCYCLOPEDIA PAGE -->
+      <section class="page" id="page-encyclopedia">
+        <div class="encyclopedia-page">
+          <h2 class="scan-title">Threat Encyclopedia</h2>
+          <p class="scan-sub">A quick reference library — the same knowledge your AI Coach draws on.</p>
+
+          <input type="text" id="encyclopediaSearch" class="encyclopedia-search" placeholder="Search threats and topics..." />
+
+          <div class="encyclopedia-grid" id="encyclopediaGrid"></div>
+        </div>
+      </section>
+
+      <!-- REPORTS PAGE -->
+      <section class="page" id="page-reports">
+        <div class="reports-page">
+          <div class="reports-head">
+            <div>
+              <h2 class="scan-title">Reports</h2>
+              <p class="scan-sub">Full history of every file scanned in this browser.</p>
+            </div>
+            <button class="clear-btn" id="clearHistoryBtn">Clear History</button>
+          </div>
+
+          <div class="stat-grid reports-summary">
+            <div class="stat-card">
+              <p class="stat-label">Total Scans</p>
+              <p class="stat-value" id="reportsTotalScans">0</p>
+            </div>
+            <div class="stat-card">
+              <p class="stat-label">Clean Files</p>
+              <p class="stat-value safe" id="reportsCleanCount">0</p>
+            </div>
+            <div class="stat-card">
+              <p class="stat-label">Threats Found</p>
+              <p class="stat-value danger" id="reportsThreatCount">0</p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <table class="reports-table">
+              <thead>
+                <tr><th>File Name</th><th>Result</th><th>Time</th></tr>
+              </thead>
+              <tbody id="reportsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS PAGE -->
+      <section class="page" id="page-settings">
+        <div class="settings-page">
+          <h2 class="scan-title">Settings</h2>
+          <p class="scan-sub">Personalize ThreatLens and manage your data.</p>
+
+          <div class="panel settings-panel">
+            <h3>Profile</h3>
+            <label class="settings-label">Display name</label>
+            <div class="settings-row">
+              <input type="text" id="nameInput" placeholder="Enter your name" />
+              <button class="save-btn" id="saveNameBtn">Save</button>
+            </div>
+          </div>
+
+          <div class="panel settings-panel">
+            <h3>Protection</h3>
+            <div class="toggle-row">
+              <div>
+                <p class="toggle-title">Real-Time Protection indicator</p>
+                <p class="toggle-sub">Shows the ON/OFF status badge in the sidebar.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="protectionToggle" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="panel settings-panel">
+            <h3>Data & Privacy</h3>
+            <p class="settings-note">All scan history, stats, and preferences are stored locally in your browser only — nothing is sent to a server. Clearing your browser data will erase them.</p>
+            <button class="clear-btn" id="resetAppBtn">Reset All App Data</button>
+          </div>
+
+          <div class="panel settings-panel">
+            <h3>About</h3>
+            <p class="settings-note">ThreatLens v0.1 — a demo cybersecurity awareness project. File scanning uses extension checks only and is not a substitute for real antivirus software.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
