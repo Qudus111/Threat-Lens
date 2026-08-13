@@ -17,6 +17,7 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 32 
 
 app.use(cors()); // allows your frontend (running on a different port) to call this backend
 app.use(express.json());
+app.use(express.static(__dirname));
 
 const COACH_SYSTEM_PROMPT = `You are the ThreatLens AI Coach, a friendly cybersecurity awareness mentor built into a security dashboard app.
 Your job is to teach everyday users about cybersecurity, with special emphasis on the CIA triad (Confidentiality, Integrity, Availability) whenever it's relevant.
@@ -147,6 +148,6 @@ function buildResult(fileName, sha256, stats, cached) {
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
-app.listen(PORT, () => {
-  console.log(`ThreatLens backend running at http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`ThreatLens backend running on port ${PORT}`);
 });
